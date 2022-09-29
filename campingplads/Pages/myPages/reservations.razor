@@ -1,0 +1,44 @@
+﻿@page "/data/reservations"
+
+@using DataAccessLibrary
+@using DataAccessLibrary.Models
+
+@inject IReservations _db
+
+<h1>reservation page</h1>
+
+<h4>current reservations</h4>
+@if(reservation is null){
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>lot ID</th>
+                <th>lot size</th>
+                <th>rented</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var reservation in reservation)
+            {
+                <tr>
+                    <td>@reservation.lotID</td>
+                    <td>@reservation.lotSize</td>
+                    <td>@reservation.Rented</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<Lots> reservation;
+
+    protected override async Task OnInitializedAsync()
+    {
+        reservation = await _db.GetReservation();
+    }
+}
