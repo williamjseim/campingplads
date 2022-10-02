@@ -6,25 +6,32 @@
 @using DataAccessLibrary.Models
 @using campingplads.Models
 
-@inject IReservations _db
+@inject IReservations _reservationDB
+@inject IOrders _orderDB
 
 <h1>reservation page</h1>
 <h4>Insert New lot</h4>
-<EditForm Model="@lot" OnValidSubmit="@Insert">
+<EditForm Model="@lot" OnSubmit="@Insert">
 <DataAnnotationsValidator />
 <ValidationSummary/>
 
 <InputNumber id="lotSize" @bind-Value="lot.lotSize"/>
 <InputNumber id="rented" @bind-Value="lot.rented"/>
-<button type="submit" class="btn btn-primary">submit</button>
 
+<InputText id="LotID" Value="what lot do you want to stay at" />
+<InputText id="First name" @bind-Value="order.firstName" />
+<InputText id="Last Name" @bind-Value="order.lastName" />
+<InputNumber id="Phone_Number" @bind-Value="order.phoneNumber" />
+<InputText id="Email" @bind-Value="order.email" />
+
+<button type="submit" class="btn btn-primary">submit</button>
 </EditForm>
 
 
-   
+
 <h4>current reservations</h4>
 
-@if(reservation is null){
+@if(lots is null){
     <p><em>Loading...</em></p>
 }
 else
@@ -38,7 +45,7 @@ else
             </tr>
         </thead>
         <tbody>
-            @foreach (var reservation in reservation)
+            @foreach (var reservation in lots)
             {
                 <tr>
                     <td>@reservation.lotID</td>
@@ -49,24 +56,16 @@ else
         </tbody>
     </table>
 }
-    <input type="text" @bind="@test2"/>
-
-    <input type="submit"  value="submit" @onclick="test" />
-@code{
-    public string test2 { get; set; }
-
-    public void test(){
-        Console.Write(test2);
-    }
-}
 
 @code {
-    private List<LotsModel> reservation;
+    private List<OrderModel> orders;
+    private List<LotsModel> lots;
     private DisplayLotsModel lot = new DisplayLotsModel();
-
+    private DisplayOrderModel order = new DisplayOrderModel();
     protected override async Task OnInitializedAsync()
     {
-        reservation = await _db.GetReservation();
+        lots = await _reservationDB.GetLot();
+        orders = await _orderDB.GetTable();
     }
 
     private async Task Insert(){
@@ -74,10 +73,19 @@ else
                 lotSize = lot.lotSize,
                 Rented = lot.rented
             };
-        await _db.InsertReservation(p);
+        OrderModel l = new OrderModel
+            {
+                firstName = order.firstName,
+                lastName = order.lastName,
+                email = order.email,
+                adress = order.adress
+            };
+        await _reservationDB.InsertLot(p);
+        await _orderDB.InsertRow(l);
 
-        reservation.Add(p);
-
+        lots.Add(p);
+        orders.Add(l);
         lot = new DisplayLotsModel();
+        order = new DisplayOrderModel();
     }
 }

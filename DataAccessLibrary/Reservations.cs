@@ -9,27 +9,26 @@ namespace DataAccessLibrary
 {
     public class Reservations : IReservations
     {
-        private readonly ISqlDataAccess _db;
+        private readonly ISqlDataAccess _ReservationDB;
 
-        public Reservations(ISqlDataAccess db)
+        public Reservations(ISqlDataAccess ReservationDB)
         {
-            _db = db;
+            _ReservationDB = ReservationDB;
         }
 
-        public Task<List<LotsModel>> GetReservation()
+        public Task<List<LotsModel>> GetLot()
         {
-            string sql = "select * from dbo.lots";
+            string sql = "select rented,lotSize from dbo.lots";
 
-            return _db.loadData<LotsModel, dynamic>(sql, new { });
+            return _ReservationDB.loadData<LotsModel, dynamic>(sql, new { });
         }
 
-        public Task InsertReservation(LotsModel reservation)
+        public Task InsertLot(LotsModel reservation)
         {
-            string sql = @"insert into dbo.lots(rented, lotsize)
-                           values(@rented,@lotsize);";
+            string sql = @"insert into dbo.lots(rented,lotSize)
+                           values(@Rented,@lotsize);";
 
-            Console.WriteLine(sql.ToString() + " " + reservation.ToString());
-            return _db.SaveData(sql, reservation);
+            return _ReservationDB.SaveData(sql, reservation);
         }
     }
 }
