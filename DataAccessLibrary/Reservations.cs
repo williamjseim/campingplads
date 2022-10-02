@@ -23,7 +23,7 @@ namespace DataAccessLibrary
             return _db.loadData<LotsModel, dynamic>(sql, new { });
         }
 
-        public Task InsertReservation(Reservations reservation)
+        public Task InsertReservation(LotsModel reservation)
         {
             string sql = @"insert into dbo.lots(rented, lotsize)
                            values(@rented,@lotsize);";

@@ -5,6 +5,6 @@ namespace DataAccessLibrary
     public interface IReservations
     {
         Task<List<LotsModel>> GetReservation();
-        Task InsertReservation(Reservations reservation);
+        Task InsertReservation(LotsModel reservation);
     }
 }
