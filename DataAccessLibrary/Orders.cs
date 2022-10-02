@@ -16,14 +16,14 @@ namespace DataAccessLibrary
             _orderDB = orderDB;
         }
 
-        public Task<List<OrderModel>> GetTable()
+        public Task<List<OrderModel>> GetTable()//get everything in one table from the database
         {
             string sql = "select * from dbo.orders";
 
             return _orderDB.loadData<OrderModel, dynamic>(sql, new { });
         }
 
-        public Task InsertRow(OrderModel data)
+        public Task InsertRow(OrderModel data)//insert data into sql database
         {
             string sql = @"insert into dbo.orders(lotID,first_name,last_name,phone_number,email)
                            values(@lotID,@first_name,@last_name,@phone_number,@email);";

@@ -17,7 +17,7 @@ namespace DataAccessLibrary
             this._config = _config;
         }
 
-        public async Task<List<T>> loadData<T, U>(string sql, U parameters)
+        public async Task<List<T>> loadData<T, U>(string sql, U parameters)//loads data from sql database
         {
             string connectionString = _config.GetConnectionString(this.ConnectionStringName);
 
@@ -28,7 +28,7 @@ namespace DataAccessLibrary
             }
         }
 
-        public async Task SaveData<T>(string sql, T parameters)
+        public async Task SaveData<T>(string sql, T parameters)//saves the data to sql database
         {
             string connectionString = _config.GetConnectionString(this.ConnectionStringName);
             using (IDbConnection connection = new SqlConnection(connectionString))
