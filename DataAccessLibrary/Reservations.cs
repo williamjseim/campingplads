@@ -16,17 +16,19 @@ namespace DataAccessLibrary
             _db = db;
         }
 
-        public Task<List<Lots>> GetReservation()
+        public Task<List<LotsModel>> GetReservation()
         {
             string sql = "select * from dbo.lots";
 
-            return _db.loadData<Lots, dynamic>(sql, new { });
+            return _db.loadData<LotsModel, dynamic>(sql, new { });
         }
 
         public Task InsertReservation(Reservations reservation)
         {
             string sql = @"insert into dbo.lots(rented, lotsize)
                            values(@rented,@lotsize);";
+
+            Console.WriteLine(sql.ToString() + " " + reservation.ToString());
             return _db.SaveData(sql, reservation);
         }
     }

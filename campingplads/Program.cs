@@ -17,7 +17,7 @@ namespace campingplads
             builder.Services.AddSingleton<WeatherForecastService>();
             builder.Services.AddTransient<ISqlDataAccess, SqlDataAccess>();
             builder.Services.AddTransient<IReservations, Reservations>();
-
+            
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

@@ -1,13 +1,29 @@
 ﻿@page "/data/reservations"
 
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.Extensions.Logging
 @using DataAccessLibrary
 @using DataAccessLibrary.Models
+@using campingplads.Models
 
 @inject IReservations _db
 
 <h1>reservation page</h1>
+<h4>Insert New Person</h4>
+<EditForm Model="@lot" OnValidSubmit="@Insert">
+<DataAnnotationsValidator />
+<ValidationSummary/>
 
+<InputNumber id="lotSize" @bind-Value="lot.lotSize"/>
+<InputNumber id="rented" @bind-Value="lot.rented"/>
+<button type="submit">submit</button>
+
+</EditForm>
+
+
+   
 <h4>current reservations</h4>
+
 @if(reservation is null){
     <p><em>Loading...</em></p>
 }
@@ -33,12 +49,33 @@ else
         </tbody>
     </table>
 }
+    <input type="text" @bind="@test2"/>
+
+    <input type="submit"  value="submit" @onclick="test" />
+@code{
+    public string test2 { get; set; }
+
+    public void test(){
+        Console.Write(test2);
+    }
+}
 
 @code {
-    private List<Lots> reservation;
+    private List<LotsModel> reservation;
+    private DisplayLotsModel lot = new DisplayLotsModel();
 
     protected override async Task OnInitializedAsync()
     {
         reservation = await _db.GetReservation();
+    }
+
+    private async Task Insert(){
+        LotsModel p = new LotsModel {
+                lotSize = lot.lotSize,
+                Rented = lot.rented
+            };
+        await _db.InsertReservation(p);
+
+        reservation.Add(p);
     }
 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DataAccessLibrary.Models
 {
-    public class Lots
+    public class LotsModel
     {
         public int lotID { get; set; }
         public int Rented { get; set; }
